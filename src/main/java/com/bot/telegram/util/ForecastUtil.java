@@ -1,18 +1,13 @@
 package com.bot.telegram.util;
 
+import com.bot.telegram.util.enums.WeatherInfoEnum;
 import tk.plogitech.darksky.forecast.model.*;
 
-import java.util.ResourceBundle;
 import static com.bot.telegram.util.DateUtil.*;
-import static com.bot.telegram.util.Settings.EOL;
+import static com.bot.telegram.setting.Settings.EOL;
+import static com.bot.telegram.util.ResoursesUtil.getName;
 
 public class ForecastUtil {
-    private static ResourceBundle resource = ResourceBundle.getBundle("weather");
-
-    public static String getName(String key){
-        return resource.getString(key);
-    }
-
     public static String getForecastInfoCurrently(Forecast forecast, String location){
         StringBuffer sb = new StringBuffer();
         sb.append(EOL)

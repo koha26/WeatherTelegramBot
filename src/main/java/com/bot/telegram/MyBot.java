@@ -2,6 +2,9 @@ package com.bot.telegram;
 
 import com.bot.telegram.command.*;
 import com.bot.telegram.controller.CommandController;
+import com.bot.telegram.setting.InfoMessages;
+import com.bot.telegram.util.ResoursesUtil;
+import com.bot.telegram.util.enums.OutInfoEnum;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
@@ -12,6 +15,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class MyBot extends TelegramLongPollingBot {
+    private Logger logger = org.apache.log4j.Logger.getLogger(MyBot.class);
 
     private CommandController controller;
 
@@ -21,11 +25,10 @@ public class MyBot extends TelegramLongPollingBot {
         commands.put(CommandEnum.WEATHER_7.getName(), new DailyWeatherCommand());
         commands.put(CommandEnum.WEATHER_2.getName(), new HourlyWeatherCommand());
         commands.put(CommandEnum.START.getName(), new StartCommand());
+        commands.put(CommandEnum.LANGUAGE.getName(), new ChangeLanguageCommand());
 
         controller = new CommandController(new CommandContainer(commands));
     }
-
-    private Logger logger = org.apache.log4j.Logger.getLogger(MyBot.class);
     /**
      * A map chat id -> handling command
      */
@@ -39,7 +42,7 @@ public class MyBot extends TelegramLongPollingBot {
             if (messageText.equalsIgnoreCase(CommandEnum.WEATHER.getName())) {
                 commandInChats.put(chatId, CommandEnum.WEATHER);
 
-                String resp = "Enter <city name> or <latitude longitude>";
+                String resp = ResoursesUtil.getName(OutInfoEnum.ENTER_DATA.getName());
                 sendResponse(chatId, resp);
                 return;
             } else if (messageText.equalsIgnoreCase(CommandEnum.START.getName())) {
@@ -48,13 +51,19 @@ public class MyBot extends TelegramLongPollingBot {
             } else if (messageText.equalsIgnoreCase(CommandEnum.WEATHER_7.getName())) {
                 commandInChats.put(chatId, CommandEnum.WEATHER_7);
 
-                String resp = "Enter <city name> or <latitude longitude>";
+                String resp = ResoursesUtil.getName(OutInfoEnum.ENTER_DATA.getName());
                 sendResponse(chatId, resp);
                 return;
             } else if (messageText.equalsIgnoreCase(CommandEnum.WEATHER_2.getName())) {
                 commandInChats.put(chatId, CommandEnum.WEATHER_2);
 
-                String resp = "Enter <city name> or <latitude longitude>";
+                String resp = ResoursesUtil.getName(OutInfoEnum.ENTER_DATA.getName());
+                sendResponse(chatId, resp);
+                return;
+            } else if (messageText.equalsIgnoreCase(CommandEnum.LANGUAGE.getName())) {
+                commandInChats.put(chatId, CommandEnum.LANGUAGE);
+
+                String resp = ResoursesUtil.getName(OutInfoEnum.LANGUAGE.getName());
                 sendResponse(chatId, resp);
                 return;
             }
@@ -76,7 +85,7 @@ public class MyBot extends TelegramLongPollingBot {
         try {
             sendMessage(message);
         } catch (TelegramApiException e) {
-            logger.error("Can't send response.", e);
+            logger.error(InfoMessages.CANT_SEND_RESPONSE, e);
         }
     }
 

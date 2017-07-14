@@ -4,7 +4,8 @@ public enum CommandEnum {
     WEATHER("/weather"),
     WEATHER_7("/weather7"),
     WEATHER_2("/weather2"),
-    START("/start");
+    START("/start"),
+    LANGUAGE("/lan");
 
     private String name;
     CommandEnum(String name) {

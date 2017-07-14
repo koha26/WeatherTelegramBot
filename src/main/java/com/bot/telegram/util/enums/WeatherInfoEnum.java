@@ -1,4 +1,4 @@
-package com.bot.telegram.util;
+package com.bot.telegram.util.enums;
 
 public enum WeatherInfoEnum {
     LOCATION,
