@@ -12,7 +12,12 @@ public class ResoursesUtil {
         return resource.getString(key);
     }
 
+    public static Locale getLocale(){
+        return resource.getLocale();
+    }
+
     public static void changeLanguage(String language)  {
-        resource = ResourceBundle.getBundle(Settings.getResourcesFileName(), new Locale(language));
+        Locale locale = new Locale.Builder().setLanguage(language).build();
+        resource = ResourceBundle.getBundle(Settings.getResourcesFileName(), locale);
     }
 }

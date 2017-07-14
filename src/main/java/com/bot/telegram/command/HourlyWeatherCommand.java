@@ -5,6 +5,7 @@ import com.bot.telegram.util.ForecastUtil;
 import com.bot.telegram.util.ResoursesUtil;
 import com.bot.telegram.util.enums.ErrorMessageEnum;
 import com.google.maps.model.LatLng;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.objects.Update;
 import tk.plogitech.darksky.api.jackson.DarkSkyJacksonClient;

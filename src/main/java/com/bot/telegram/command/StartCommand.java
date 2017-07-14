@@ -2,6 +2,7 @@ package com.bot.telegram.command;
 
 import com.bot.telegram.util.ResoursesUtil;
 import com.bot.telegram.util.enums.OutInfoEnum;
+import com.vdurmont.emoji.EmojiParser;
 import org.telegram.telegrambots.api.objects.Update;
 
 public class StartCommand implements Command {
@@ -9,6 +10,6 @@ public class StartCommand implements Command {
     public String execute(Update update) {
         StringBuffer sb = new StringBuffer();
         sb.append(ResoursesUtil.getName(OutInfoEnum.START_MENU.getName()));
-        return sb.toString();
+        return EmojiParser.parseToUnicode(sb.toString());
     }
 }

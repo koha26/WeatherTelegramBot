@@ -5,7 +5,7 @@ public enum WeatherInfoEnum {
     DATE,
     TEMPERATURE,
     TIME,
-    WIND,
+    WINDY,
     HUMIDITY,
     VISIBILITY,
     PRESSURE,
@@ -16,7 +16,9 @@ public enum WeatherInfoEnum {
     TEMPERATURE_MAX,
     TEMPERATURE_MIN_TIME,
     TEMPERATURE_MAX_TIME,
-    CLOUD_COVER;
+    CLOUD_COVER,
+    FORECAST_7,
+    FORECAST_2;
 
     public String getName(){
         return this.name().toLowerCase();

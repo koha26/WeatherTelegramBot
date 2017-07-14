@@ -5,19 +5,26 @@ import com.bot.telegram.controller.CommandController;
 import com.bot.telegram.setting.InfoMessages;
 import com.bot.telegram.util.ResoursesUtil;
 import com.bot.telegram.util.enums.OutInfoEnum;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Update;
+import org.telegram.telegrambots.api.objects.replykeyboard.InlineKeyboardMarkup;
+import org.telegram.telegrambots.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MyBot extends TelegramLongPollingBot {
     private Logger logger = org.apache.log4j.Logger.getLogger(MyBot.class);
 
     private CommandController controller;
+
+    private InlineKeyboardMarkup markupInline;
 
     public MyBot() {
         Map<String, Command> commands = new HashMap<>();
@@ -28,7 +35,15 @@ public class MyBot extends TelegramLongPollingBot {
         commands.put(CommandEnum.LANGUAGE.getName(), new ChangeLanguageCommand());
 
         controller = new CommandController(new CommandContainer(commands));
+
+        markupInline = new InlineKeyboardMarkup();
+        List<List<InlineKeyboardButton>> rowsInline = new ArrayList<>();
+        List<InlineKeyboardButton> rowInline = new ArrayList<>();
+        rowInline.add(new InlineKeyboardButton().setText("/start").setCallbackData("/start"));
+        rowsInline.add(rowInline);
+        markupInline.setKeyboard(rowsInline);
     }
+
     /**
      * A map chat id -> handling command
      */
@@ -67,7 +82,13 @@ public class MyBot extends TelegramLongPollingBot {
                 sendResponse(chatId, resp);
                 return;
             }
+
             handle(chatId, update);
+        } else if (update.hasCallbackQuery()) {
+            String callData = update.getCallbackQuery().getData();
+            long chatId = update.getCallbackQuery().getMessage().getChatId();
+
+            handleCallbackQuery(chatId, callData, update);
         }
     }
 
@@ -78,10 +99,16 @@ public class MyBot extends TelegramLongPollingBot {
         }
     }
 
+    private void handleCallbackQuery(long chatId, String callData, Update update) {
+        String res = controller.getCommand(callData).execute(update);
+        sendResponse(chatId, res);
+    }
+
     private void sendResponse(long chatId, String text) {
         SendMessage message = new SendMessage()
                 .setChatId(chatId)
-                .setText(text);
+                .setText(EmojiParser.parseToUnicode(text));
+        message.setReplyMarkup(markupInline);
         try {
             sendMessage(message);
         } catch (TelegramApiException e) {

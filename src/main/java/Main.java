@@ -1,9 +1,12 @@
 import com.bot.telegram.MyBot;
+import com.bot.telegram.setting.InfoMessages;
+import org.apache.log4j.Logger;
 import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 public class Main {
+    private static Logger logger = Logger.getLogger(Main.class);
     public static void main(String[] args) {
         ApiContextInitializer.init();
         TelegramBotsApi botsApi = new TelegramBotsApi();
@@ -11,7 +14,7 @@ public class Main {
         try {
             botsApi.registerBot(new MyBot());
         } catch (TelegramApiException e) {
-            e.printStackTrace();
+            logger.error(InfoMessages.CANT_REGISTER_BOT, e);
         }
     }
 }

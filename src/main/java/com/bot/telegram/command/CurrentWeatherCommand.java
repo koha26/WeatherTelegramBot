@@ -5,6 +5,7 @@ import com.bot.telegram.util.ForecastUtil;
 import com.bot.telegram.util.ResoursesUtil;
 import com.bot.telegram.util.enums.ErrorMessageEnum;
 import com.google.maps.model.LatLng;
+import com.vdurmont.emoji.EmojiParser;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.api.objects.Update;
 import tk.plogitech.darksky.api.jackson.DarkSkyJacksonClient;
@@ -23,13 +24,13 @@ public class CurrentWeatherCommand implements Command {
     public String execute(Update update) {
         String input = update.getMessage().getText();
         LatLng latLng = getGeoCodeFromInput(input);
-        if (latLng == null){
+        if (latLng == null) {
             return ResoursesUtil.getName(ErrorMessageEnum.CANT_OBTAIN_GEOLOCATION.getName());
         }
 
         ForecastRequest request = new ForecastRequestBuilder()
                 .key(new APIKey(getDarkSkyApiKey()))
-                .language(ForecastRequestBuilder.Language.en)
+                .language(ForecastRequestBuilder.Language.valueOf(ResoursesUtil.getLocale().getLanguage()))
                 .location(new GeoCoordinates(new Longitude(latLng.lng), new Latitude(latLng.lat))).build();
 
         DarkSkyJacksonClient client = new DarkSkyJacksonClient();
