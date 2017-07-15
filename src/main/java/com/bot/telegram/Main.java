@@ -1,4 +1,5 @@
-import com.bot.telegram.MyBot;
+package com.bot.telegram;
+
 import com.bot.telegram.setting.InfoMessages;
 import org.apache.log4j.Logger;
 import org.telegram.telegrambots.ApiContextInitializer;
